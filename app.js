@@ -1,6 +1,7 @@
 //followed from: https://www.youtube.com/watch?v=7nafaH9SddU
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const url = require('url');
 
 const app = express();
 
@@ -20,6 +21,28 @@ app.post('/api/login', (req, res) => {
     var secret = 'a1b2c3';
     const user = { id: 1, username: 'brad', email: 'brad@gmail.com'};
     jwt.sign({user: user}, secret, {expiresIn: '120s'}, (err, token) =>{ 
+        res.json({token: token});
+    } );
+    //req.params
+
+} );
+
+//request as: >curl "http://localhost:4000/api/userlogin?user=sdass&password=abc123
+app.post('/api/userlogin', (req, res) => {
+    //real user
+    console.log('req_url=' + req.url);
+    console.log('or in express already preped: user/password=' + req.query.user + '/'+ req.query.password );
+
+     // req.url
+    //var url_parts = url.parse(req.url);
+    //console.log(url_parts.query);
+    console.log("cred=" +  req.query.user + " " + req.query.password);
+
+    
+    var secret = 'a1b2c3';
+    const user = { id: 1, username: req.query.user, email: 'brad@gmail.com'};
+    
+    jwt.sign({user: user}, secret, {expiresIn: '1200s'}, (err, token) =>{ 
         res.json({token: token});
     } );
     //req.params
